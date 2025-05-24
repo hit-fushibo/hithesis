@@ -32,19 +32,6 @@
     \label{fig:1}
 \end{figure}
 
-% Miao等人最早对图像的配准变换参数采用的是深度学习算法进行预测。针对在计算速度和变形范围上存在局限性的现有配准方法，他们利用CNN回归器直接对变换参数进行估计，从而实现了3DCT图像和2DX射线脊柱图像的刚性配准，构建了五层卷积神经网络。该方法相对于一些传统的以强度的为基础配准方法，在配准效果上有了明显的提高\cite{miao2016cnn}。Miao等人在随后的研究中\cite{miao2016real}提出了可直接以数位重建射线照片(DRR)和X射线影像来估计变换参数的新型六层CNN网络结构。这种方法可以实现精确的2D/3D匹配，DRR渲染更少，运算效率更高，更适合实时应用。
-
-
-% Cao等人\cite{cao2018deep}使用了具有3个神经元的基于CNN的模型的输出层，其中每个神经元表示微小斑块中间沿x、y和z轴的运动幅度,能够得到与更传统的方法一样准确的结果。
-
-% Yang等人使用基于CNN的U-Net模型学习了具有相同分辨率的大脑MR图像的形变场，并在各种数据集上获得了出色的配准精度\cite{yang2017quicksilver}。
-
-% Uzunova等采用FlownetFramework\cite{dosovitskiy2015flownet}，采用仿随机生成、仿射配准生成和统计外观模型(SAM)生成变换三种方法生成标准标签数据\cite{uzunova2017training}。然后，他们在脑部和心脏的2DMR图像上利用合成形变场加以校准。有研究显示，在这三种方法中，CNN的学习和训练都取得了最优的效果，其基础是SAM生成的标准标签数据。
-
-% Fan等人利用将有监督与无监督损失的双重监督对脑部3DMR所匹配的变形场进行预测。为解决标准标签数据缺失的问题，他们提出了一个分层双监管的全卷积网络(FCN)\cite{long2015fully}，该网络将标准标签数据与图像相似性度量同时作为监督的两种方式。损失函数被加入到网络的每一层，从而使某些层收敛的可能性更大。Fan等以U-NETFramework\cite{ronneberger2015u}为基础，引入空隙填充，提出了利用预测变换与标准标签数据之间的均方误差(MSE)作为损失函数，并结合预先匹配的标准标签数据与图像相似性来训练网络的网络架构，称为Birnet。
-
-% Cao等人对MR-MR损耗和CT-CT损耗两种损耗分别采用了双重监督配准\cite{cao2018deep}，即利用图像相似性在同模态下进行监督配准。他们在试验中直接将多模图像通过预对齐图像转化为单模图像，并根据输入的CT和MR图像预测转换场实现MR-CT匹配。同时，其损失函数使用标签数据与网络输出运动图像之间的归一化互相关。此类似，Liu等人的训练也是采用监督合成变换和无监督图像相似性的描述来训练\cite{liu2019multimodal}。
-
 Miao研究团队率先将深度学习算法引入医学影像配准的参数预测领域。针对传统方法在计算效率与形变建模能力方面存在的显著约束，其构建了包含五层卷积的深度网络架构，通过端到端回归机制实现3D-CT与2D X射线脊柱影像的刚性对齐。相较于基于强度相似度的经典配准范式，该模型在脊柱解剖结构的空间匹配精度上实现了突破性提升\cite{miao2016cnn}。后续研究中，其进一步优化网络架构至六层深度，创新性地采用数位重建射线投影与X线影像的直接特征融合策略。这种改进使得2D/3D跨模态配准的DRR渲染效率得到进一步提升，为术中实时导航提供了可行方案\cite{miao2016real}。
 
 Cao等人在跨模态配准研究中提出创新性特征建模方法。其设计的卷积神经网络末端设置三维运动预测模块，通过三个独立神经元分别解析局部解剖区域在笛卡尔坐标系的位移矢量。实验结果表明，该模型在微运动配准任务中的性能指标与传统迭代优化算法具有统计等效性\cite{cao2018deep}。
@@ -149,23 +136,58 @@ LUMIR测试集包含590张脑部MRI图像，但缺乏分割标签与解剖标记
 
 可视化评估主要依靠肉眼观察对配准后图像与固定图像的相似性进行评估。如图\ref{fig:c2-1}、\ref{fig:c2-2}、\ref{fig:c2-3}，可以看出，经过配准过后得到的配准图像与固定图像更为相似，因此认为该配准效果较好。
 
+% \begin{figure}[h]
+%     \centering
+%     \subfigure[固定及浮动图像]
+%     {
+%         \begin{minipage}{0.3\textwidth}
+%             \centering
+%             \includegraphics[width=\textwidth]{fix-img.png}\\
+%             \includegraphics[width=\textwidth]{moving-img.png}
+%         \end{minipage}
+%     }
+%     \subfigure[PAN结果]
+%     {
+%     \label{fig:pre-tained-PAN}
+%         \begin{minipage}{0.3\textwidth}
+%             \centering
+%         \includegraphics[width=\textwidth]{pre-tained-PAN.png}\\
+%         \includegraphics[width=\textwidth]{pre-tained-PAN-field.png}
+        
+%         \end{minipage}
+    
+%     }
+%     \subfigure[RegCST结果]
+%     {\label{fig:pre-tained-Reg}
+%         \begin{minipage}{0.3\textwidth}
+%             \centering
+%         \includegraphics[width=\textwidth]{pre-tained-Reg.png}\\
+%         \includegraphics[width=\textwidth]{pre-tained-Reg-field.png}
+        
+%         \end{minipage}
+        
+%     }
+%     \caption{预训练可视化结果}
+% \end{figure}
+
 \begin{figure}[h]
     \centering
-    \begin{minipage}{0.3\textwidth}
+    \subfigure[固定图像]{\label{fig:c2-1}
+        \begin{minipage}{0.3\textwidth}
         \includegraphics[width=\textwidth]{c2-fiximg.png}
-        \caption{固定图像}
-        \label{fig:c2-1}
-    \end{minipage}
-    \begin{minipage}{0.3\textwidth}
+        \end{minipage}
+    }
+    \subfigure[浮动图像]{\label{fig:c2-2}
+        \begin{minipage}{0.3\textwidth}
         \includegraphics[width=\textwidth]{c2-moveimg.png}
-        \caption{浮动图像}
-        \label{fig:c2-2}
-    \end{minipage}
-    \begin{minipage}{0.3\textwidth}
+        \end{minipage}
+    }
+    \subfigure[配准图像]{\label{fig:c2-3}
+        \begin{minipage}{0.3\textwidth}
         \includegraphics[width=\textwidth]{c2-regimg.png}
-        \caption{配准图像}
-        \label{fig:c2-3}
-    \end{minipage}
+        \end{minipage}
+    }
+    \caption{配准可视化}
 \end{figure}
 
 在有分割标签时，可将配准后的标签叠加在固定图像上以便于更好的观察两幅图像特定解剖结构的相似性，如图\ref{fig:c2-4}。
@@ -183,16 +205,20 @@ LUMIR测试集包含590张脑部MRI图像，但缺乏分割标签与解剖标记
 
 \begin{figure}[h]
     \centering
-    \begin{minipage}{0.4\textwidth}
+    \subfigure[浮动图像差分图]{\label{fig:c2-5}
+        \begin{minipage}{0.4\textwidth}
         \includegraphics[width=\textwidth]{c2-imgdiff1.png}
-        \caption{浮动图像差分图}
-        \label{fig:c2-5}
+        
     \end{minipage}
-    \begin{minipage}{0.4\textwidth}
+    }
+    \subfigure[配准后图像差分图]{\label{fig:c2-6}
+        \begin{minipage}{0.4\textwidth}
         \includegraphics[width=\textwidth]{c2-imgdiff2.png}
-        \caption{配准后图像差分图}
-        \label{fig:c2-6}
+        
+        
     \end{minipage}
+    }
+    \caption{差分可视化}
 \end{figure}
 
 图\ref{fig:c2-5}是浮动图像与固定图像的差分图，可以看出在大脑边缘两张图像并不对齐，有较多的白色区域，表明固定图像与浮动图像在该区域相似性不佳。图\ref{fig:c2-6}是经过配准后的配准图像与固定图像的差分图，图像基本呈现黑色，尤其在边缘部分，表明配准后图像已经基本对齐。
@@ -905,8 +931,8 @@ VRC模块旨在提高相互学习的效率。简单来说，对于每个体素�
             \includegraphics[width=\textwidth]{VM-field.png}
         \end{minipage}
     }
-    \label{fig:7-2}
-    \caption{互学习优化后可视化结果}
+    
+    \caption{互学习优化后可视化结果}\label{fig:7-2}
 \end{figure}
 
 值得注意的是，SDlogJ的持续下降（三轮降幅达4.1\%）反映出形变场平滑性的系统性改善，可能源于递归训练中扩散正则化的累积效应，或网络对局部梯度冲突的自适应抑制。进一步分析表明，互学习优化的性能增益主要源于两方面：其一，教师网络（PAN）的多尺度特征提取能力为学生网络（RegCST）提供了全局解剖约束，避免其陷入局部最优；其二，VRC模块的动态掩膜机制在递归训练中逐步筛选出更可靠的监督区域。此外，双向知识蒸馏促使两网络在迭代中互补优化——PAN网络通过学生网络的反馈增强了局部形变预测的一致性，而RegCST网络则借助教师网络的监督提升了复杂边界的对齐精度。

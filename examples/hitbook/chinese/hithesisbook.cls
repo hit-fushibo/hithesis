@@ -178,6 +178,7 @@
   \fi
 \fi
 \RequirePackage{etoolbox}
+\RequirePackage{utfsym}
 \RequirePackage{ifxetex}
 \ifxetex
 \else
@@ -1406,7 +1407,7 @@
   \begin{center}
     \vspace*{-3mm}
     \noindent 
-    \xiaosi $\square$ 毕业论文 \quad $\square$ 毕业设计 
+    \xiaosi \usym{2610} 毕业论文 \quad \usym{2611} 毕业设计 
     \hfill 
     \xiaosi\hit@secretlevel：公开\hspace{14mm} 
     \par
